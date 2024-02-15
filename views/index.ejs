@@ -32,12 +32,29 @@
                     </option>
                     <% }) %>
             </select>
-            <input type="submit" value="carregar modelos">
+            <input type="submit" value="carregar anos">
+        </form>
+
+       <form  method="get" action="/anos">
 
             <% } %>
 
+                <% if (locals.anos) { %>
+                    <select name="ano" id="anocars">
 
-    </form>
+                        <% anos.forEach(element=> { %>
+                            <option value="<%=element%>">
+                                <%=element%>
+                            </option>
+                            <% }) %>
+                    </select>
+                    <input type="submit" value="carregar valores">
+                    <% } %>
+</form>
+
+
+
+
 
 </body>
 
