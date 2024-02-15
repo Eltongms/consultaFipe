@@ -10,9 +10,9 @@
 <body>
 
     <form method="get" action="/modelos">
-        <label for="cars">Choose a car:</label>
+        <label for="marca">Escola a marca:</label>
 
-        <select name="marca" id="cars">
+        <select name="marca" id="marca">
 
             <% marcas.forEach(element=> { %>
                 <option value="<%=element.nome%>">
@@ -20,42 +20,69 @@
                 </option>
                 <% }) %>
         </select>
-        <input type="submit" value="carregar modelos">
 
-        <% if (locals.modelos) { %>
 
-            <select name="modelo" id="modelocars">
+        <select name="modelo" id="modelo">
 
-                <% modelos.forEach(element=> { %>
-                    <option value="<%=element%>">
-                        <%=element%>
-                    </option>
-                    <% }) %>
-            </select>
-            <input type="submit" value="carregar anos">
-        </form>
+            <option value=""></option>           
 
-       <form  method="get" action="/anos">
+        </select>
 
-            <% } %>
+    </form>
 
-                <% if (locals.anos) { %>
-                    <select name="ano" id="anocars">
+    <form method="get" action="/anos">
 
-                        <% anos.forEach(element=> { %>
-                            <option value="<%=element%>">
-                                <%=element%>
-                            </option>
-                            <% }) %>
-                    </select>
-                    <input type="submit" value="carregar valores">
-                    <% } %>
-</form>
+        <% } %>
+
+            <% if (locals.anos) { %>
+                <select name="ano" id="anocars">
+
+                    <% anos.forEach(element=> { %>
+                        <option value="<%=element%>">
+                            <%=element%>
+                        </option>
+                        <% }) %>
+                </select>
+
+                <% } %>
+    </form>
 
 
 
 
+    <script>
+        const modeloSelect = document.getElementById("modelo");
+        const resultDiv = document.getElementById("result");
+
+        modeloSelect.addEventListener("change", async () => {
+            try {
+                const selectedModelo = modeloSelect.value;
+                const response = await fetch(`https://parallelum.com.br/fipe/api/v1/carros/marcas/${selectedModelo}/modelos`);
+                const data = await response.json();
+
+                // Clear previous results
+                // resultDiv.innerHTML = "";
+
+                // Display the fetched models
+                data.forEach(model => {
+                    const modelDiv = document.createElement("option");
+                    modelDiv.textContent = model.nome;
+                    resultDiv.appendChild(modelDiv);
+                });
+            } catch (error) {
+                console.error("Error fetching models:", error.message);
+                resultDiv.innerHTML = "Error fetching models: " + error.message;
+            }
+        });
+    </script>
 
 </body>
 
 </html>
+
+<!-- data.forEach(marca => {
+    const option = document.createElement("option");
+    option.value = marca.codigo;
+    option.text = marca.nome;
+    marcaSelect.appendChild(option);
+}); -->
