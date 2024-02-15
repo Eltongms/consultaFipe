@@ -42,22 +42,19 @@ app.get('/modelos', async (req, res) => {
         let modelos = [];
         console.log(result.data)
         result.data.modelos.forEach(element => {
-            // modelos.push(element.nome)
             modelos.push(element.nome)
         });
-        res.send(modelos);
+
+        res.render("index.ejs",{marcas: marcas ,modelos: modelos})
+
+       //  res.send(modelos);
     } catch (error) {
         if (error.response) {
-            res.send("Erro ao buscar modelos: " + error.response.statusText)
+            res.send("Erro de resposta ao buscar modelos: " + error.response.statusText)
         } else {
-            res.send("Erro ao buscar modelos: " + error.request)
+            res.send("Erro de request buscar modelos: " + error.request)
         }
-    }
-
-    // res.render("index.ejs",)
-
-
-    //res.render("index.ejs", {marcas: result.data})
+    }    
 })
 
 

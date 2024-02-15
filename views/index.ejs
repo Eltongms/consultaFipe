@@ -9,17 +9,34 @@
 
 <body>
 
-    <form  method="get" action="/modelos">
+    <form method="get" action="/modelos">
         <label for="cars">Choose a car:</label>
 
         <select name="marca" id="cars">
 
             <% marcas.forEach(element=> { %>
-                <option value="<%=element.nome%>"><%=element.nome%>
+                <option value="<%=element.nome%>">
+                    <%=element.nome%>
                 </option>
                 <% }) %>
         </select>
         <input type="submit" value="carregar modelos">
+
+        <% if (locals.modelos) { %>
+
+            <select name="modelo" id="modelocars">
+
+                <% modelos.forEach(element=> { %>
+                    <option value="<%=element%>">
+                        <%=element%>
+                    </option>
+                    <% }) %>
+            </select>
+            <input type="submit" value="carregar modelos">
+
+            <% } %>
+
+
     </form>
 
 </body>
