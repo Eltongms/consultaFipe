@@ -9,13 +9,13 @@
 
 <body>
 
-    <form  method="get" action="modelos">
+    <form  method="get" action="/modelos">
         <label for="cars">Choose a car:</label>
 
         <select name="marca" id="cars">
 
             <% marcas.forEach(element=> { %>
-                <option value=<%=element.nome %>> <%=element.nome %>
+                <option value="<%=element.nome%>"><%=element.nome%>
                 </option>
                 <% }) %>
         </select>
