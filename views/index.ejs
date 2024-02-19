@@ -28,12 +28,9 @@
 
         </select>
 
-    </form>
+        <select name="ano" id="ano">
 
-    <form method="get" action="/anos">
-
-        <select name="ano" id="anocars">
-
+            <option value=""></option>
 
         </select>
 
@@ -42,40 +39,74 @@
 
 
 
+
+
     <script>
         const marcaSelect = document.getElementById("marca");
         const modeloSelect = document.getElementById("modelo");
         const anoSelect = document.getElementById("ano");
+        let marcas = null;
+        let modelos = null;
+        let objMarca;
 
-        modeloSelect.addEventListener("change", async () => {
+        window.addEventListener("load", async (event) => {
             try {
-                const selectedModelo = marcaSelect.value;
-                const response = await fetch(`https://parallelum.com.br/fipe/api/v1/carros/marcas/${selectedModelo}/modelos`);
-                const data = await response.json();
+                const response = await fetch(`https://parallelum.com.br/fipe/api/v1/carros/marcas`);
+                marcas = await response.json();
+            } catch (error) {
+                console.log("Erro ao buscar marcas: " + error);
+            }
+        });
 
-                // Clear previous results
-                // resultDiv.innerHTML = "";
 
-                // Display the fetched models
-                data.forEach(model => {
-                    const modelDiv = document.createElement("option");
-                    modelDiv.textContent = model.nome;
-                    resultDiv.appendChild(modelDiv);
+        marcaSelect.addEventListener("change", async () => {
+            try {
+                const marcaSelected = marcaSelect.value;
+                objMarca = marcas.find(e => e.nome === marcaSelected);
+                const response = await fetch(`https://parallelum.com.br/fipe/api/v1/carros/marcas/${objMarca.codigo}/modelos`);
+                modelos = await response.json();
+
+               // console.log(modelos);
+                while (modeloSelect.firstChild) {
+                    modeloSelect.removeChild(modeloSelect.firstChild);
+                }
+                modelos.modelos.forEach(m => {
+                    const optModelo = document.createElement("option");
+                    optModelo.textContent = m.nome;
+                    modeloSelect.appendChild(optModelo);
                 });
             } catch (error) {
                 console.error("Error fetching models:", error.message);
                 resultDiv.innerHTML = "Error fetching models: " + error.message;
             }
         });
+
+
+        modeloSelect.addEventListener("change", async () => {
+            try {
+
+                let codigoModelo = modelos.modelos.find(m => m.nome === modeloSelect.value).codigo;
+
+                const response = await fetch(`https://parallelum.com.br/fipe/api/v1/carros/marcas/${objMarca.codigo}/modelos/${codigoModelo}/anos`);
+                const anos = await response.json();
+
+                console.log(anos);
+                while (anoSelect.firstChild) {
+                    anoSelect.removeChild(anoSelect.firstChild);
+                }
+                anos.forEach(a => {
+                    const optAno = document.createElement("option");
+                    optAno.textContent = a.nome;
+                    anoSelect.appendChild(optAno);
+                }); 
+            } catch (error) {
+                console.error("Error fetching models:", error.message);
+                resultDiv.innerHTML = "Error fetching models: " + error.message;
+            }
+        });
+
     </script>
 
 </body>
 
 </html>
-
-<!-- data.forEach(marca => {
-    const option = document.createElement("option");
-    option.value = marca.codigo;
-    option.text = marca.nome;
-    marcaSelect.appendChild(option);
-}); -->
